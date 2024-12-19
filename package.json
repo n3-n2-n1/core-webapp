@@ -16,7 +16,8 @@
     "@tensorflow/tfjs-backend-webgpu": "^4.10.0",
     "@tensorflow/tfjs-converter": "^4.10.0",
     "@tensorflow/tfjs-core": "^4.10.0",
-    "scatter-gl": "0.0.8"
+    "scatter-gl": "0.0.8",
+    "three": "0.113.2"
   },
   "scripts": {
     "watch": "cross-env NODE_ENV=development parcel index.html --no-hmr --open",
@@ -45,7 +46,7 @@
   },
   "resolutions": {
     "is-svg": "4.3.1",
-     "three": "^0.137.0"
+    "three": "0.113.2"
   },
   "eslintConfig": {
     "extends": "google",
