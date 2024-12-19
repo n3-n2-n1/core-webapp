@@ -977,7 +977,7 @@
     "@parcel/utils" "^1.11.0"
     physical-cpu-count "^2.0.0"
 
-"@tensorflow-models/pose-detection@file:../../dist":
+"@tensorflow-models/pose-detection@file:lib-pose":
   version "0.0.0"
 
 "@tensorflow/tfjs-backend-cpu@4.10.0":
@@ -5684,7 +5684,7 @@ saxes@^3.1.9:
 
 scatter-gl@0.0.8:
   version "0.0.8"
-  resolved "https://registry.npmjs.org/scatter-gl/-/scatter-gl-0.0.8.tgz#d695f6b6bc94feb74b9dce332fe2eeb7db3c24aa"
+  resolved "https://registry.yarnpkg.com/scatter-gl/-/scatter-gl-0.0.8.tgz#d695f6b6bc94feb74b9dce332fe2eeb7db3c24aa"
   integrity sha512-f+UD1Ugrn9W5Ulq1zSizUlPje136J05MJsbD1LXQvbF+9U9H6skD2ckOJd3FKVzOjM1k3UoFQQVFCeBghYGSgQ==
   dependencies:
     three "^0.113"
@@ -6162,7 +6162,7 @@ text-table@~0.2.0:
 
 three@^0.113:
   version "0.113.2"
-  resolved "https://registry.npmjs.org/three/-/three-0.113.2.tgz#04791d491fe4359330f9dbe7b767db18bfb35d67"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.113.2.tgz#04791d491fe4359330f9dbe7b767db18bfb35d67"
   integrity sha512-x3vrKW41/UtbWbWduWKGlfIc043SvHWr3YltehYq+UGb9YglQ2oztNGvl2eut05JtNSmP11Mh3t6Xak5/0e+Fg==
 
 through2@^2.0.0, through2@~2.0.3:
