@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 export function setupStats() {
   // Parchear BufferGeometry de Three.js para evitar warnings
   THREE.BufferGeometry.prototype.addAttribute = function (name, attribute) {
