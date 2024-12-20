@@ -1,36 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
+  <script src="https://cdn.tailwindcss.com"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Interactive Web App</title>
+  <title>C.O.R.E AI - POC</title>
   <style>
     /* Reset básico */
+
+    .updated {
+      color: #ff5722;
+      transition: color 0.5s ease;
+    }
+
+
+    /* Personalización general */
+    #gui {
+      visibility: hidden;
+      font-family: 'Arial', sans-serif;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      padding: 10px;
+      width: 100%;
+      /* Que ocupe todo el ancho */
+      max-width: 800px;
+      /* No exceder un ancho fijo */
+      position: fixed;
+      /* Fijo en la pantalla */
+      bottom: 0;
+      /* Posicionado al final de la pantalla */
+      left: 50%;
+      /* Centramos horizontalmente */
+      transform: translateX(50%);
+      /* Ajuste perfecto para centrar */
+      z-index: 1000;
+      /* Asegurar que esté encima de otros elementos */
+    }
+
+    /* Cambiar colores de texto y controles */
+    #gui .dg {
+      color: #a0aec0;
+      /* Texto gris claro */
+    }
+
+    #gui .dg .cr {
+      background: #2d3748;
+      /* Fondo gris oscuro */
+      border: none;
+      border-radius: 5px;
+    }
+
+    /* Estilo de carpetas */
+    #gui .dg .folder {
+      margin-bottom: 10px;
+      border: none;
+    }
+
+    #gui .dg .folder .title {
+      background: #4a5568;
+      /* Fondo gris oscuro */
+      color: #cbd5e0;
+      /* Texto claro */
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+
+    /* Controles */
+    #gui .dg select {
+      background: #4a5568;
+      color: white;
+      border-radius: 5px;
+      border: none;
+      padding: 5px;
+    }
+
+    #gui .dg input[type="number"],
+    #gui .dg input[type="text"] {
+      background: #4a5568;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 5px;
+    }
+
+    /* Botones */
+    #gui .dg .button {
+      background: #3182ce;
+      /* Azul */
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 8px 10px;
+      cursor: pointer;
+    }
+
+    #gui .dg .button:hover {
+      background: #63b3ed;
+      /* Azul claro */
+    }
+
+    /* Adaptación para pantallas pequeñas */
+    @media (max-width: 768px) {
+      #gui {
+        max-width: 90%;
+        /* Ocupa el 90% del ancho */
+        padding: 8px;
+      }
+
+      #gui .dg .folder .title {
+        font-size: 14px;
+      }
+
+      #gui .dg select,
+      #gui .dg input[type="number"],
+      #gui .dg input[type="text"] {
+        font-size: 14px;
+        padding: 4px;
+      }
+
+      #gui .dg .button {
+        font-size: 14px;
+        padding: 6px 8px;
+      }
+    }
+
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
+    @keyframes gradientAnimation {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
     body {
       font-family: 'Roboto', Arial, sans-serif;
-      background-color: #f5f6fa;
-      color: #333;
+      background: linear-gradient(45deg, #ff6f00, #ffcc80, #ffffff, #333333);
       display: flex;
+      animation: gradientAnimation 10s ease infinite;
+      background-size: 400% 400%;
+      height: 100vh;
+      margin: 0;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      min-height: 100vh;
-      margin: 0;
-      overflow-x: hidden; /* Evitar scroll horizontal */
+      overflow-x: hidden;
+      /* Evitar scroll horizontal */
     }
 
     /* Header de estadísticas */
     #stats {
       width: 100%;
       height: 60px;
-      background-color: #1e1e2e;
-      color: #fff;
+      color: #535353;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -39,7 +175,9 @@
       text-transform: uppercase;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
       z-index: 100;
-      position: sticky; /* Queda fijo al hacer scroll */
+      position: sticky;
+
+      /* Queda fijo al hacer scroll */
       top: 0;
     }
 
@@ -68,22 +206,20 @@
     /* Contenedores de contenido */
     .canvas-wrapper,
     #scatter-gl-container {
-      background: #fff;
+      background: #000000;
       border: 1px solid #ddd;
       border-radius: 12px;
-      padding: 20px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 100%;
-      max-width: 600px;
-      min-height: 300px;
+      width: auto;
     }
 
-    canvas, video {
-      width: 100%;
-      height: 100%;
+    canvas,
+    video {
+      width: 80%;
+      height: auto;
       object-fit: cover;
       border-radius: 10px;
     }
@@ -93,36 +229,14 @@
       top: 0;
       left: 0;
       transform: scaleX(-1);
-      visibility: hidden; /* Cambia a visible si es necesario */
+      visibility: hidden;
+      /* Cambia a visible si es necesario */
     }
 
-    /* Botones de control */
-    .controls {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      width: 100%;
+    .metric-value {
+      transition: all 0.3s ease-in-out;
     }
 
-    .controls button {
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-      width: 100%;
-      max-width: 150px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .controls button:hover {
-      background-color: #0056b3;
-      transform: scale(1.05); /* Efecto de zoom al pasar el cursor */
-    }
 
     /* Responsividad para dispositivos móviles */
     @media (max-width: 768px) {
@@ -162,80 +276,199 @@
     }
 
     /* Contenedor principal del panel de Stats.js */
-#stats > div {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  z-index: 1000;
-  background: rgba(0, 0, 0, 0.8);
-  border-radius: 8px;
-  padding: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-family: 'Roboto', Arial, sans-serif;
-  font-size: 0.9rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
+    #stats>div {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.8);
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-family: 'Roboto', Arial, sans-serif;
+      font-size: 0.9rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
 
-/* Estilo de los canvas generados por Stats.js */
-#stats canvas {
-  width: 100px !important;
-  height: 70px !important;
-  border-radius: 6px;
-  margin-top: 5px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
+    /* Estilo de los canvas generados por Stats.js */
+    #stats canvas {
+      width: 100px !important;
+      height: 70px !important;
+      border-radius: 6px;
+      margin-top: 5px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
 
-/* Adaptar panel en dispositivos más pequeños */
-@media (max-width: 768px) {
-  #stats > div {
-    top: 10px;
-    right: 10px;
-    padding: 8px;
-    font-size: 0.8rem;
-  }
+    /* Adaptar panel en dispositivos más pequeños */
+    @media (max-width: 768px) {
+      #stats>div {
+        top: 10px;
+        right: 10px;
+        padding: 8px;
+        font-size: 0.8rem;
+      }
 
-  #stats canvas {
-    width: 80px !important;
-    height: 60px !important;
-  }
-}
+      #stats canvas {
+        width: 80px !important;
+        height: 60px !important;
+      }
+    }
 
-@media (max-width: 480px) {
-  #stats > div {
-    top: 5px;
-    right: 5px;
-    padding: 5px;
-    font-size: 0.75rem;
-  }
+    @media (max-width: 480px) {
+      #stats>div {
+        top: 5px;
+        right: 5px;
+        padding: 5px;
+        font-size: 0.75rem;
+      }
 
-  #stats canvas {
-    width: 70px !important;
-    height: 50px !important;
-  }
-}
-
+      #stats canvas {
+        width: 70px !important;
+        height: 50px !important;
+      }
+    }
   </style>
 
 </head>
-<body>
-  <div id="stats">Performance Stats</div>
-  <div id="main">
-    <div class="container">
-      <div class="canvas-wrapper">
-        <canvas id="output"></canvas>
-        <video id="video" playsinline></video>
+
+<body class="text-gray-900 min-h-screen flex flex-col items-center">
+  <!-- Panel de Estadísticas -->
+  <div id="stats" class="w-full bg-transparent text-white text-center py-2 font-bold uppercase shadow-md">
+    C.O.R.E AI - POC
+  </div>
+
+  <!-- Contenedor Principal -->
+  <div id="main" class="w-full max-w-6xl px-4 py-6 flex flex-col gap-6">
+    <!-- Contenedor Adaptable -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Canvas y Video -->
+      <div class="canvas-wrapper relative bg-white rounded-lg shadow-md p-4 flex items-center justify-center">
+        <canvas id="output" class="w-full h-full"></canvas>
+        <video id="video" playsinline class="absolute top-0 left-0 w-full h-full rounded-lg"></video>
       </div>
-      <div id="scatter-gl-container">
+
+      <!-- ScatterGL Container -->
+      <div id="scatter-gl-container" class="">
+        <!-- ScatterGL Render -->
       </div>
     </div>
+
+    <!-- Métricas -->
+    <div id="metrics" class="w-full bg-white text-black py-6 shadow-md rounded-lg p-8">
+      <!-- Título de la sección -->
+
+      <!-- Contenedor de métricas -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-sm md:text-base">
+        <!-- Movimiento -->
+        <div class="flex items-center gap-3 bg-blue-50 p-4 rounded-lg shadow-sm">
+          <i class="fas fa-running text-blue-500 text-xl"></i>
+          <div class="flex flex-col">
+            <span class="text-gray-600">Movimiento</span>
+            <span id="movement" class="font-semibold text-gray-800">Calculando...</span>
+          </div>
+        </div>
+
+        <!-- Postura -->
+        <div class="flex items-center gap-3 bg-green-50 p-4 rounded-lg shadow-sm hidden">
+          <i class="fas fa-child text-green-500 text-xl"></i>
+          <div class="flex flex-col">
+            <span class="text-gray-600">Postura</span>
+            <span id="posture" class="font-semibold text-gray-800">Calculando...</span>
+          </div>
+        </div>
+
+        <!-- Índice de Trabajo -->
+        <div class="flex items-center gap-3 bg-purple-50 p-4 rounded-lg shadow-sm hidden">
+          <i class="fas fa-clipboard-check text-purple-500 text-xl"></i>
+          <div class="flex flex-col">
+            <span class="text-gray-600">Frecuenc</span>
+            <span id="work-index" class="font-semibold text-gray-800">Calculando...</span>
+          </div>
+        </div>
+
+        <!-- Estado -->
+        <div class="flex items-center gap-3 bg-red-50 p-4 rounded-lg shadow-sm updated metric-value">
+          <i class="fas fa-heartbeat text-red-500 text-xl"></i>
+          <div class="flex flex-col">
+            <span class="text-gray-600">Estado</span>
+            <span id="status" class="font-semibold text-gray-800">Calculando...</span>
+          </div>
+        </div>
+
+        <!-- Calorías Quemadas -->
+        <div class="flex items-center gap-3 bg-orange-50 p-4 rounded-lg shadow-sm hidden">
+          <i class="fas fa-fire text-orange-500 text-xl"></i>
+          <div class="flex flex-col">
+            <span class="text-gray-600">Calorías Quemadas</span>
+            <span id="calories" class="font-semibold text-gray-800">0.00 kcal</span>
+          </div>
+        </div>
+
+        <!-- Esfuerzo Acumulado -->
+        <div class="flex items-center gap-3 bg-yellow-50 p-4 rounded-lg shadow-sm">
+          <i class="fas fa-chart-line text-yellow-500 text-xl"></i>
+          <div class="flex flex-col">
+            <span class="text-gray-600">Esfuerzo Acumulado</span>
+            <span id="effort" class="font-semibold text-gray-800">0%</span>
+          </div>
+        </div>
+
+        <!-- Índice de Profundidad -->
+        <div class="flex items-center gap-3 bg-gray-50 p-4 rounded-lg shadow-sm">
+          <i class="fas fa-dumbbell text-gray-500 text-xl"></i>
+          <div class="flex flex-col">
+            <span class="text-gray-600">Índice de Profundidad</span>
+            <span id="exercise-score" class="font-semibold text-gray-800">0.00%</span>
+          </div>
+        </div>
+
+
+
+        <!-- Contenedor para Estabilidad de la Pose -->
+        <div class="flex items-center gap-3 bg-gray-100 p-4 rounded-lg shadow-md">
+          <i class="fas fa-balance-scale text-green-500 text-xl"></i>
+          <div class="flex flex-col">
+            <span class="text-gray-600 font-medium">Estabilidad de la Pose</span>
+            <span id="pose-stability" class="font-semibold text-gray-800 text-lg">Calculando...</span>
+          </div>
+        </div>
+
+        <!-- Contenedor para Simetría Corporal -->
+        <div class="flex items-center gap-3 bg-gray-100 p-4 rounded-lg shadow-md">
+          <i class="fas fa-columns text-purple-500 text-xl"></i>
+          <div class="flex flex-col">
+            <span class="text-gray-600 font-medium">Simetría Corporal</span>
+            <span id="symmetry" class="font-semibold text-gray-800 text-lg metric-value">Calculando...</span>
+          </div>
+        </div>
+
+        <!-- Contenedor para Nivel de Esfuerzo -->
+        <div class="flex items-center gap-4 bg-white p-4 rounded-lg shadow-lg sm:flex-col sm:items-start hidden">
+
+          <i class="fas fa-fire text-red-500 text-xl"></i>
+          <div class="flex flex-col">
+            <span class="text-gray-600 font-medium">Nivel de Esfuerzo</span>
+            <span id="effort-level" class="font-semibold text-gray-800 text-lg">Calculando...</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
+
+  <!-- Agregar Font Awesome -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
 </body>
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.min.js"></script>
 <script src="src/index.js"></script>
+
 </html>
